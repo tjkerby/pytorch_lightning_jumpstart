@@ -9,7 +9,7 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import TQDMProgressBar, ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
 from torchmetrics import MetricCollection
-from torchmetrics.classification import MulticlassAccuracy, MulticlassPrecision, MulticlassRecall, Accuracy
+from torchmetrics.classification import Accuracy
 from config import conf
 import shutil
 import os
@@ -59,11 +59,7 @@ class LitMLP_Classifier(pl.LightningModule):
         self.fc2 = nn.Linear(conf['hidden_size'], conf['hidden_size'])
         self.fc3 = nn.Linear(conf['hidden_size'], 10)
         self.dropout = nn.Dropout(conf['drop_out_p'])
-        #self.loss = nn.BCEWithLogitsLoss()
-        # self.loss = nn.BCELoss()
-        # self.loss = nn.NLLLoss()
         self.loss = nn.CrossEntropyLoss()
-        self.sig = nn.Sigmoid()
         self.softmax = nn.LogSoftmax(dim=1)
         metrics = MetricCollection([Accuracy(task="multiclass", num_classes=10)])#MulticlassAccuracy(10), MulticlassPrecision(10), MulticlassRecall(10)])
         self.train_metrics = metrics.clone(prefix='train_')
@@ -74,7 +70,6 @@ class LitMLP_Classifier(pl.LightningModule):
         x = x.view(x.size(0), -1)
         x = self.dropout(F.relu(self.fc1(x)))
         x = self.dropout(F.relu(self.fc2(x)))
-        # x = self.sig(self.fc3(x))
         x = self.softmax(self.fc3(x))
         return x
 

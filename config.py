@@ -3,12 +3,11 @@ conf = dict(
     bs = 32,
     num_workers = 62,
     hidden_size = 100,
-    drop_out_p = .0,
-    save_path = './checkpoints/local_corex_mlp_mnist/no_dropout/',
+    drop_out_p = .2,
+    save_path = './checkpoints/save_path_name/',
     patience = 20,
     logger = dict(
-        # name = 'tb_logs',
-        version = 'bs_128_CELoss_lr_5em4_do_0_hs_100'
+        version = 'version_name'
     ),
     trainer = dict(
         devices = 4,
